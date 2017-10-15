@@ -1,5 +1,5 @@
 # Nginx for Docker #
-My standard Nginx Dockerfile for PHP development. Primarily concerned with with [Craft CMS][craft] and [Laravel][laravel] projects, but it's so simply it'll probably work with other frameworks and languages.
+My standard Nginx Dockerfile for PHP development. Primarily concerned with [Craft CMS][craft] and [Laravel][laravel] projects, but it's so simple it'll probably work with other frameworks and languages.
 
 [craft]: https://craftcms.com/
 [laravel]: https://laravel.com/
