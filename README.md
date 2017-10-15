@@ -22,9 +22,9 @@ Example usage:
 docker run \
     -d \
     -p 80:80 \
-    -v ./config:/etc/nginx/conf.d \
-    -v ./code:/var/code \
-    -v ./logs:/var/log/nginx \
+    -v ~/code/myapp/config:/etc/nginx/conf.d \
+    -v ~/code/myapp/code:/var/code \
+    -v ~/code/myapp/logs:/var/log/nginx \
     monooso/docker-nginx:latest
 ```
 
