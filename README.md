@@ -22,9 +22,9 @@ Example usage:
 docker run \
     -d \
     -p 80:80 \
-    -v ~/code/myapp/config:/etc/nginx/conf.d \
-    -v ~/code/myapp/code:/var/code \
-    -v ~/code/myapp/logs:/var/log/nginx \
+    -v ~/myapp/code:/var/code \
+    -v ~/myapp/nginx/config:/etc/nginx/conf.d \
+    -v ~/myapp/nginx/logs:/var/log/nginx \
     monooso/docker-nginx:latest
 ```
 
@@ -35,10 +35,6 @@ server {
     listen 80;
     server_name myapp
     error_log  /var/log/nginx/myapp-error.log;
-
-    # Map each site (even if it's just the one) into a subdirectory of
-    # `/var/code`. You can then override this in the PHP location block.
-    root /var/code/myapp/public;
 
     index index.html index.php;
 
