@@ -10,11 +10,10 @@ My standard Nginx Dockerfile for PHP development. Primarily concerned with [Craf
 Don't forget to map whatever port your site configuration is listening on.
 
 ### Volumes ###
-The image defines three volumes:
+The image defines two volumes:
 
 1. `/etc/nginx/conf.d`, which should contain your `site.conf` files.
 2. `/var/code`, which should contain your application code.
-3. `/var/log/nginx`, which is where the container will write its log files.
 
 Example usage:
 
@@ -24,7 +23,6 @@ docker run \
     -p 80:80 \
     -v ~/myapp/code:/var/code \
     -v ~/myapp/nginx/config:/etc/nginx/conf.d \
-    -v ~/myapp/nginx/logs:/var/log/nginx \
     monooso/docker-nginx:latest
 ```
 
@@ -33,8 +31,7 @@ docker run \
 ```nginx
 server {
     listen 80;
-    server_name myapp
-    error_log  /var/log/nginx/myapp-error.log;
+    server_name myapp;
 
     index index.html index.php;
 
@@ -61,7 +58,7 @@ server {
     }
 
     # Serve static assets.
-    location /assets {
+    location /assets/ {
         try_files $uri $uri/ =404;
     }
 
@@ -89,4 +86,3 @@ server {
     # Misc settings.
     sendfile off;
 }
-```
