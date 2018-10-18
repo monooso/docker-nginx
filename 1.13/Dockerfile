@@ -1,6 +1,25 @@
-FROM nginx:1.13-alpine
+FROM nginx:1.13
 
-# Copy the config files.
+# Install OpenSSL
+RUN apt-get update && apt-get install --no-install-recommends --no-install-suggests -y openssl
+
+# Generate an SSL certificate
+RUN mkdir -p /etc/ssl/local.vm
+
+RUN openssl genrsa -out "/etc/ssl/local.vm/local.vm.key" 2048
+
+RUN openssl req \
+  -new \
+  -key "/etc/ssl/local.vm/local.vm.key" \
+  -out "/etc/ssl/local.vm/local.vm.csr" \
+  -subj "/C=GB/ST=London/L=London/O=Local VM/CN=*.local.vm"
+
+RUN openssl x509 -req -days 365 \
+    -in "/etc/ssl/local.vm/local.vm.csr" \
+    -signkey "/etc/ssl/local.vm/local.vm.key" \
+    -out "/etc/ssl/local.vm/local.vm.crt"
+
+# Copy the config files
 COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY ./fastcgi_params /etc/nginx/fastcgi_params
 

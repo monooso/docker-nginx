@@ -26,16 +26,33 @@ docker run \
     monooso/docker-nginx:latest
 ```
 
+## HTTPS support ##
+The image contains a self-signed SSL certificate, valid for all `*.local.vm` domains. Your browser will still issue stern warnings, but if you ignore them your site will happily function over HTTPS.
+
 ## Example `site.conf` file ##
 
 ```nginx
 server {
     listen 80;
-    server_name myapp;
-
-    index index.html index.php;
+    listen 443 ssl;
+    server_name example.local.vm;
 
     charset utf-8;
+
+    # SSL
+    ssl_certificate      /etc/ssl/local.vm/local.vm.crt;
+    ssl_certificate_key  /etc/ssl/local.vm/local.vm.key;
+    ssl on;
+    ssl_session_cache  builtin:1000  shared:SSL:10m;
+    ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
+    ssl_prefer_server_ciphers on;
+
+    # The path to the code in the nginx container
+    root /var/code/app/public;
+
+    # "Directory index" files
+    index index.html index.php;
 
     # Increase the max body size to allow large file uploads
     client_max_body_size 1024M;
@@ -58,7 +75,7 @@ server {
     }
 
     # Serve static assets.
-    location /assets/ {
+    location /assets {
         try_files $uri $uri/ =404;
     }
 
@@ -67,22 +84,20 @@ server {
         try_files $uri $uri/ /index.php?$query_string;
     }
 
-    # Handle PHP files.
+    # Pass PHP requests to the application container.
     location ~ \.php$ {
-        # The path to the code on the application server.
+        # The path to the code in the application container.
         root /var/code/public;
 
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
 
         # Pass the request to php-fpm, on port 9000.
         include fastcgi_params;
-
-        # Change `myapp` to the name of your application Docker container.
-        fastcgi_pass myapp:9000;
-
+        fastcgi_pass app:9000;
         fastcgi_index index.php;
     }
 
     # Misc settings.
     sendfile off;
 }
+```
