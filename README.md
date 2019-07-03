@@ -101,3 +101,10 @@ server {
     sendfile off;
 }
 ```
+
+## Building ##
+Build the Docker images from the repository root. For example:
+
+```bash
+docker build -t monooso/docker-nginx:1.16 -f Dockerfile-1.16 .
+```
