@@ -27,7 +27,7 @@ docker run \
 ```
 
 ## HTTPS support ##
-The image contains a self-signed SSL certificate, valid for all `*.local.vm` domains. Your browser will still issue stern warnings, but if you ignore them your site will happily function over HTTPS.
+The image contains a self-signed SSL certificate, valid for all `*.test` domains. Your browser will still issue stern warnings, but if you ignore them your site will happily function over HTTPS.
 
 ## Example `site.conf` file ##
 
@@ -35,13 +35,13 @@ The image contains a self-signed SSL certificate, valid for all `*.local.vm` dom
 server {
     listen 80;
     listen 443 ssl;
-    server_name example.local.vm;
+    server_name example.test;
 
     charset utf-8;
 
     # SSL
-    ssl_certificate      /etc/ssl/local.vm/local.vm.crt;
-    ssl_certificate_key  /etc/ssl/local.vm/local.vm.key;
+    ssl_certificate      /etc/ssl/test/test.crt;
+    ssl_certificate_key  /etc/ssl/test/test.key;
     ssl on;
     ssl_session_cache  builtin:1000  shared:SSL:10m;
     ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;

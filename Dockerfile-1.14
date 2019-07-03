@@ -4,20 +4,20 @@ FROM nginx:1.14
 RUN apt-get update && apt-get install --no-install-recommends --no-install-suggests -y openssl
 
 # Generate an SSL certificate
-RUN mkdir -p /etc/ssl/local.vm
+RUN mkdir -p /etc/ssl/test
 
-RUN openssl genrsa -out "/etc/ssl/local.vm/local.vm.key" 2048
+RUN openssl genrsa -out "/etc/ssl/test/test.key" 2048
 
 RUN openssl req \
   -new \
-  -key "/etc/ssl/local.vm/local.vm.key" \
-  -out "/etc/ssl/local.vm/local.vm.csr" \
-  -subj "/C=GB/ST=London/L=London/O=Local VM/CN=*.local.vm"
+  -key "/etc/ssl/test/test.key" \
+  -out "/etc/ssl/test/test.csr" \
+  -subj "/C=GB/ST=London/L=London/O=Local VM/CN=*.test"
 
 RUN openssl x509 -req -days 365 \
-    -in "/etc/ssl/local.vm/local.vm.csr" \
-    -signkey "/etc/ssl/local.vm/local.vm.key" \
-    -out "/etc/ssl/local.vm/local.vm.crt"
+    -in "/etc/ssl/test/test.csr" \
+    -signkey "/etc/ssl/test/test.key" \
+    -out "/etc/ssl/test/test.crt"
 
 # Copy the config files
 COPY ./config/nginx.conf /etc/nginx/nginx.conf
